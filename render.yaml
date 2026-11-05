@@ -1,0 +1,25 @@
+services:
+  # 1. Public Hosted Demo URL (FastAPI + Chat & Bucket UI)
+  - type: web
+    name: paypal-vacation-concierge-web
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
+      - key: RENDER_API_KEY
+        sync: false
+      - key: RENDER_WORKFLOW_SLUG
+        value: vacation-sentinel
+
+  # 2. Durable Background Price Watcher (Render Workflows)
+  - type: workflow
+    name: vacation-sentinel
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m workflows.sentinel
