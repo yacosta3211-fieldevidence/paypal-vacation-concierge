@@ -203,3 +203,10 @@ async def api_capture_paypal_order(order_id: str, order_type: str = "HOTEL_BOOKI
         user["booking_status"] = "PAID_VIA_PAYPAL"
 
     return {"capture": capture_data, "state": user}
+    app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+
+@app.get("/")
+async def serve_dashboard():
+    """Serves the split-screen Vacation Concierge UI and Judge Controls."""
+    return FileResponse("app/static/index.html")
